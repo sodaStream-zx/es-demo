@@ -24,7 +24,7 @@ import java.util.Map;
 //@Service
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
-public class EsService {
+public class EsSocketService {
 
     @Autowired
     private Client client;
@@ -35,7 +35,7 @@ public class EsService {
         jsonObject.put("name", "zxx");
         jsonObject.put("age", 26);
         jsonObject.put("pwd", "zxx1994");
-        IndexResponse indexResponse = client.prepareIndex("person", "zxx", "1").setSource(jsonObject.toJSONString()).get();
+        IndexResponse indexResponse = client.prepareIndex("person", "user", "1").setSource(jsonObject.toJSONString()).get();
         System.out.println(indexResponse.getIndex());
         System.out.println(indexResponse.getType());
         System.out.println(indexResponse.getVersion());
@@ -44,7 +44,7 @@ public class EsService {
 
     @Test
     public void myTest2() {
-        ActionFuture<GetResponse> doc = client.get(new GetRequest().index("blog").type("blog"));
+        ActionFuture<GetResponse> doc = client.get(new GetRequest().index("person").type("user"));
         GetResponse getFields = doc.actionGet();
         Map<String, GetField> fields = getFields.getFields();
         fields.forEach((s, objects) -> System.out.println(s + " - " + objects));
