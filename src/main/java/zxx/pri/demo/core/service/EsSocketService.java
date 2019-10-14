@@ -5,6 +5,7 @@ import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.get.GetField;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,6 +42,21 @@ public class EsSocketService {
         System.out.println(indexResponse.getType());
         System.out.println(indexResponse.getVersion());
         System.out.println(indexResponse.getResult().toString());
+    }
+
+    @Test
+    public void myTest_3() {
+        Map<String, Object> jsonMap = new HashMap<>();
+        jsonMap.put("date", "2019-10-16");
+        jsonMap.put("name", "zxx");
+        jsonMap.put("tweet", "白雪纷纷何所似");
+        jsonMap.put("user_id", "2");
+        jsonMap.put("email", "1139835238@qq.com");
+        jsonMap.put("username", "gangdaner");
+        IndexRequestBuilder indexRequestBuilder = client.prepareIndex("gb", "tweet");
+        IndexResponse indexResponse = indexRequestBuilder.setSource(jsonMap).get();
+        System.out.println(indexResponse);
+
     }
 
     @Test
