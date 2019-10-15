@@ -1,4 +1,4 @@
-package zxx.pri.demo.core.controller;
+package zxx.pri.core.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

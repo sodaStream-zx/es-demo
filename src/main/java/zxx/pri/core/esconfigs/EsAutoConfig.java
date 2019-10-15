@@ -1,4 +1,4 @@
-package zxx.pri.demo.core.esconfigs;
+package zxx.pri.core.esconfigs;
 
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;

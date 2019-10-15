@@ -1,4 +1,4 @@
-package zxx.pri.demo.core.esconfigs;
+package zxx.pri.core.esconfigs;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

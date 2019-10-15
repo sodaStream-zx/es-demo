@@ -1,14 +1,13 @@
-package zxx.pri.demo.core.service;
+package zxx.pri.core.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.elasticsearch.action.ActionFuture;
-import org.elasticsearch.action.bulk.BulkRequestBuilder;
-import org.elasticsearch.action.get.GetRequest;
-import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.get.GetField;
+import org.elasticsearch.search.aggregations.Aggregations;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,15 +60,19 @@ public class EsSocketService {
 
     @Test
     public void myTest2() {
-        ActionFuture<GetResponse> doc = client.get(new GetRequest().index("person").type("user"));
-        GetResponse getFields = doc.actionGet();
-        Map<String, GetField> fields = getFields.getFields();
-        fields.forEach((s, objects) -> System.out.println(s + " - " + objects));
+        SearchResponse searchResponse = client.search(new SearchRequest().indices("gb").types("tweet")).actionGet();
+        JSONObject jsonObject = JSON.parseObject(searchResponse.toString());
+        JSONObject jsonObject1 = JSON.parseObject(jsonObject.get("hits").toString());
+        System.out.println(jsonObject1.toJSONString());
+        Aggregations aggregations = searchResponse.getAggregations();
+        int numReducePhases = searchResponse.getNumReducePhases();
+        String scrollId = searchResponse.getScrollId();
+        System.out.println(searchResponse.toString());
+        System.out.println(searchResponse.getHits());
+        System.out.println(searchResponse.getHits().getHits().toString());
     }
 
     @Test
     public void myTest3() {
-        BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
-
     }
 }

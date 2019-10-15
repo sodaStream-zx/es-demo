@@ -1,4 +1,4 @@
-package zxx.pri.demo.core.service;
+package zxx.pri.core.service;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import zxx.pri.demo.core.esconfigs.EsAutoConfig;
+import zxx.pri.core.esconfigs.EsAutoConfig;
 
 /**
  * @author Twilight

@@ -1,4 +1,4 @@
-package zxx.pri.demo.core;
+package zxx.pri.core.service;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
@@ -7,7 +7,6 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.net.InetAddress;
@@ -25,7 +24,7 @@ public class EsFactory {
     private final String ip = "10.253.90.90";
     private final String localIp = "127.0.0.1";
 
-    @Bean(value = "esClient")
+    //    @Bean(value = "esClient")
     public Client client() {
         Settings settings = Settings.builder().put("cluster.name", "my-test")//集群名称
                 .put("client.transport.sniff", true) //设置客户端监控集群状态 自动把机器ip地址加到客户端
