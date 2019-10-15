@@ -27,19 +27,21 @@ public class IndexController {
 
     @PostMapping("/newTaskDataToES")
     public String insertewTaskDataToEsV2(Long realId) throws Exception {
-        if (StringUtils.isEmpty(realId)) {
-            log.warn("插入单个realid {}", realId);
+        if (!StringUtils.isEmpty(realId)) {
+            log.warn("-------->>  插入单个realid {}", realId);
+            Long st = System.currentTimeMillis();
             yunceTaskDataV2Service.insertRealData(realId);
+            log.warn("-------->>  插入realid {} ，所有数据 用时：{}", realId, (System.currentTimeMillis() - st));
         } else {
-            log.warn("遍历所有realid");
+            log.warn("-------->> 遍历所有realid");
             List<Long> longs = dataInfoMapper.listOfReaIds();
             longs.stream().forEach(aLong -> {
                 try {
                     Long st = System.currentTimeMillis();
-                    yunceTaskDataV2Service.insertRealData(realId);
-                    log.warn("插入realid {} ，所有数据 用时：{}", aLong, (System.currentTimeMillis() - st));
+                    yunceTaskDataV2Service.insertRealData(aLong);
+                    log.warn(" -------->> 插入realid {} ，所有数据 用时：{}", aLong, (System.currentTimeMillis() - st) / 1000);
                 } catch (Exception e) {
-                    log.error("异常 {}", e);
+                    log.error(" -------->>  异常 {}", e);
                 }
             });
         }

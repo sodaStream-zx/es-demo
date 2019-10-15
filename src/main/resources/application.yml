@@ -6,12 +6,12 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-  datasource:
-    url: jdbc:mysql://10.253.50.250:3306/yunce?useSSL=false&allowMultiQueries=true
-    password: 1qaz2WSX!@
-    username: zzyq
-    type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name:  com.mysql.jdbc.Driver
+  #  datasource:
+  #    url: jdbc:mysql://10.253.50.250:3306/yunce?useSSL=false&allowMultiQueries=true
+  #    password: 1qaz2WSX!@
+  #    username: zzyq
+  #    type: com.zaxxer.hikari.HikariDataSource
+  #    driver-class-name:  com.mysql.jdbc.Driver
   data:
     elasticsearch:
       cluster-name:  my-test
@@ -34,6 +34,27 @@ common:
     enabled: true
     cluster-name: my-test
     port: 9200
+  custom-durid:
+    enabled: true
+    driverClassName: com.mysql.jdbc.Driver
+    # 250
+    url: jdbc:mysql://10.253.50.250:3306/yunce?useSSL=false&allowMultiQueries=true
+    username: zzyq
+    password: 1qaz2WSX!@
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 50
+    minIdle: 10
+    maxActive: 100
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: "SELECT 1 FROM DUAL"
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 50
+    filters: "stat,wall,log4j"
 swagger:
   config:
     pack-location:  zxx

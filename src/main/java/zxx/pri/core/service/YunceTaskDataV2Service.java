@@ -5,7 +5,6 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import zxx.pri.core.esconfigs.ElasticSearchProperties;
@@ -39,7 +38,6 @@ public class YunceTaskDataV2Service {
      *
      * @return
      */
-    @Async
     public void insertRealData(Long realId) throws Exception {
         List<Map<String, Object>> mapList = taskDataV2Mapper.findDataByidsV3(realId);
         log.warn("realId {} ,数据量条数为 {}", realId, mapList.size());
