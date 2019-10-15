@@ -28,7 +28,7 @@ public class SwaggerProperties implements Serializable {
     //端口
     private String appPort;
     //扫描路径
-    private String packLocation = "pri";//controller 路径
+    private String packLocation = "zxx";//controller 路径
     //描述
     private String desc = "description ";//文档描述
     //创建联系信息

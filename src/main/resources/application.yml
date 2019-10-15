@@ -8,8 +8,9 @@ spring:
     port: 6379
   data:
     elasticsearch:
-      cluster-name:  my-test
-      cluster-nodes: 10.253.90.84:930,10.253.90.90:9300,10.253.90.93:9300
+      #      cluster-name:  my-test
+      #      cluster-nodes: 10.253.90.84:930,10.253.90.90:9300,10.253.90.93:9300
+      cluster-nodes: 127.0.0.1:9300
 logging:
   level.root: warn
 common:
@@ -32,9 +33,8 @@ common:
   custom-durid:
     enabled: true
     driverClassName: com.mysql.jdbc.Driver
-    # 250
     #    url: jdbc:mysql://10.253.50.250:3306/yunce?useSSL=false&allowMultiQueries=true
-    url: jdbc:mysql://62.234.211.179:3306/yunce?useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/yunce?useSSL=false&allowMultiQueries=true
     #    username: zzyq
     username: root
     password: zxx1994
