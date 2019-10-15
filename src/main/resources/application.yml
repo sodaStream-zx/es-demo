@@ -12,6 +12,10 @@ spring:
     username: zzyq
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name:  com.mysql.jdbc.Driver
+  data:
+    elasticsearch:
+      cluster-name:  my-test
+      cluster-nodes: 10.253.90.84:930,10.253.90.90:9300,10.253.90.93:9300
 logging:
   level.root: warn
 common:
@@ -26,7 +30,7 @@ common:
       ES_INDEX: yunce_data
       YUNCEORIGINAL: yunce_original
       ES_TASK_DATA_INDEX: yunce_task_data
-      ES_TASK_DATA_V2_INDEX: yunce_task_data_v3
+      ES_TASK_DATA_V2_INDEX: myyunce
     enabled: true
     cluster-name: my-test
     port: 9200

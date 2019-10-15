@@ -19,6 +19,8 @@ import java.util.Map;
 @Mapper
 public interface DataInfoMapper {
 
+    @Select(value = "SELECT real_id FROM t_user_task ")
+    List<Long> listOfReaIds();
     /**
      * 模糊查询和分页-- 统计总数
      *
