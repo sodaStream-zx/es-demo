@@ -10,7 +10,7 @@ spring:
     elasticsearch:
       #      cluster-name:  my-test
       #      cluster-nodes: 10.253.90.84:930,10.253.90.90:9300,10.253.90.93:9300
-      cluster-nodes: 127.0.0.1:9300
+      cluster-nodes: localhost:9300
 logging:
   level.root: warn
 common:

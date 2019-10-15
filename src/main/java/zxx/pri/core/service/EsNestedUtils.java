@@ -11,7 +11,7 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.update.UpdateRequest;
-import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -44,7 +44,7 @@ public class EsNestedUtils {
     @Resource
     private EsAutoConfig esAutoConfig;
     @Autowired
-    private TransportClient transportClient;
+    private Client transportClient;
     @Resource
     private ElasticSearchProperties elasticSearchProperties;
     @Resource

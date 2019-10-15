@@ -1,13 +1,12 @@
-package zxx.pri.core.service;
+package zxx.pri.core.esTest;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.search.SearchHit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,12 @@ import java.util.Map;
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 public class EsSocketService {
+    static {
+        System.setProperty("es.set.netty.runtime.available.processors", "false");
+    }
 
     @Autowired
-    private Client client;
+    private Client esClient;
 
     @Test
     public void myTest() {
@@ -36,7 +38,7 @@ public class EsSocketService {
         jsonObject.put("name", "zxx");
         jsonObject.put("age", 26);
         jsonObject.put("pwd", "zxx1994");
-        IndexResponse indexResponse = client.prepareIndex("person", "user", "1").setSource(jsonObject.toJSONString()).get();
+        IndexResponse indexResponse = esClient.prepareIndex("person", "user", "1").setSource(jsonObject.toJSONString()).get();
         System.out.println(indexResponse.getIndex());
         System.out.println(indexResponse.getType());
         System.out.println(indexResponse.getVersion());
@@ -52,7 +54,7 @@ public class EsSocketService {
         jsonMap.put("user_id", "2");
         jsonMap.put("email", "1139835238@qq.com");
         jsonMap.put("username", "gangdaner");
-        IndexRequestBuilder indexRequestBuilder = client.prepareIndex("gb", "tweet");
+        IndexRequestBuilder indexRequestBuilder = esClient.prepareIndex("gb", "tweet");
         IndexResponse indexResponse = indexRequestBuilder.setSource(jsonMap).get();
         System.out.println(indexResponse);
 
@@ -60,16 +62,17 @@ public class EsSocketService {
 
     @Test
     public void myTest2() {
-        SearchResponse searchResponse = client.search(new SearchRequest().indices("gb").types("tweet")).actionGet();
-        JSONObject jsonObject = JSON.parseObject(searchResponse.toString());
-        JSONObject jsonObject1 = JSON.parseObject(jsonObject.get("hits").toString());
-        System.out.println(jsonObject1.toJSONString());
-        Aggregations aggregations = searchResponse.getAggregations();
-        int numReducePhases = searchResponse.getNumReducePhases();
-        String scrollId = searchResponse.getScrollId();
-        System.out.println(searchResponse.toString());
-        System.out.println(searchResponse.getHits());
-        System.out.println(searchResponse.getHits().getHits().toString());
+        SearchResponse scrollResp = esClient.prepareSearch("gb").setTypes("tweet").setScroll(new TimeValue(60000))
+                .setSize(10)
+                .get();
+        do {
+            for (SearchHit hit : scrollResp.getHits().getHits()) {
+                //Handle the hit...
+                System.out.println(hit.getSource().toString());
+            }
+            scrollResp = esClient.prepareSearchScroll(scrollResp.getScrollId()).setScroll(new TimeValue(60000)).execute().actionGet();
+        } while (scrollResp.getHits().getHits().length != 0);
+
     }
 
     @Test
