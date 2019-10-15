@@ -6,12 +6,6 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-  #  datasource:
-  #    url: jdbc:mysql://10.253.50.250:3306/yunce?useSSL=false&allowMultiQueries=true
-  #    password: 1qaz2WSX!@
-  #    username: zzyq
-  #    type: com.zaxxer.hikari.HikariDataSource
-  #    driver-class-name:  com.mysql.jdbc.Driver
   data:
     elasticsearch:
       cluster-name:  my-test
@@ -24,7 +18,8 @@ common:
       ES_DATA_TYPE: data
       ES_USER_TYPE: user
       ES_TASK_TYPE: task
-    hosts: http://10.253.90.84:9200
+    #    hosts: http://10.253.90.84:9200
+    hosts: http://127.0.0.1:9200
     indexs:
       YUNCEDATAES: yunce_data_es
       ES_INDEX: yunce_data
@@ -38,9 +33,12 @@ common:
     enabled: true
     driverClassName: com.mysql.jdbc.Driver
     # 250
-    url: jdbc:mysql://10.253.50.250:3306/yunce?useSSL=false&allowMultiQueries=true
-    username: zzyq
-    password: 1qaz2WSX!@
+    #    url: jdbc:mysql://10.253.50.250:3306/yunce?useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://62.234.211.179:3306/yunce?useSSL=false&allowMultiQueries=true
+    #    username: zzyq
+    username: root
+    password: zxx1994
+    #    password: 1qaz2WSX!@
     type: com.alibaba.druid.pool.DruidDataSource
     initialSize: 50
     minIdle: 10
