@@ -1,4 +1,4 @@
-package zxx.pri.core.datasourceconfig;
+package zxx.pri.core.config.datasourceconfig;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.wall.WallConfig;
@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
- * @author Administrator
+ * @author zxx
  * @desc
  * @createTime 2019-04-18-下午 4:36
  */

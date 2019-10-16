@@ -1,9 +1,9 @@
-package zxx.pri.core.datasourceconfig;
+package zxx.pri.core.config.datasourceconfig;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author Administrator
+ * @author zxx
  * @desc 自定义druid数据库连接池属性
  * @createTime 2019-04-18-下午 4:21
  */

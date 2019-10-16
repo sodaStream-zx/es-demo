@@ -1,4 +1,4 @@
-package zxx.pri.core.service;
+package zxx.pri.core.config;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
@@ -33,7 +33,7 @@ public class EsFactory {
                 .build();
         TransportClient client = null;
         try {
-            client = new PreBuiltTransportClient(Settings.EMPTY).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(localIp), 9300));
+            client = new PreBuiltTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ip), 9300));
         } catch (UnknownHostException e) {
             log.error("连接es服务器异常 {} ", e);
         }

@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import zxx.pri.core.esconfigs.EsAutoConfig;
+import zxx.pri.core.config.esconfigs.EsAutoConfig;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -44,5 +44,10 @@ public class EsHttpService {
         Index index = new Index.Builder(jsonMap).index("gb").type("tweet").build();
         DocumentResult execute = jestClient.execute(index);
         System.out.println(execute.getJsonString());
+    }
+
+    @Test
+    public void myTest2() {
+        JestClient jestClient = this.getJestClient();
     }
 }

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import zxx.pri.core.esconfigs.ElasticSearchProperties;
+import zxx.pri.core.config.esconfigs.ElasticSearchProperties;
 import zxx.pri.core.mapper.TaskDataV2Mapper;
 
 import javax.annotation.Resource;

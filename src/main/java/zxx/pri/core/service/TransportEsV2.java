@@ -15,9 +15,9 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import zxx.pri.core.config.esconfigs.ElasticSearchProperties;
+import zxx.pri.core.config.esconfigs.EsAutoConfig;
 import zxx.pri.core.entity.DataPojo;
-import zxx.pri.core.esconfigs.ElasticSearchProperties;
-import zxx.pri.core.esconfigs.EsAutoConfig;
 import zxx.pri.core.mapper.DataInfoMapper;
 
 import javax.annotation.Resource;

@@ -23,9 +23,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import zxx.pri.core.config.esconfigs.ElasticSearchProperties;
+import zxx.pri.core.config.esconfigs.EsAutoConfig;
 import zxx.pri.core.entity.DataEntity;
-import zxx.pri.core.esconfigs.ElasticSearchProperties;
-import zxx.pri.core.esconfigs.EsAutoConfig;
 
 import javax.annotation.Resource;
 import java.io.IOException;
