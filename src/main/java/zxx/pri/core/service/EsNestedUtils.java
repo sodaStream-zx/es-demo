@@ -1,6 +1,5 @@
 package zxx.pri.core.service;
 
-import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.http.JestHttpClient;
 import io.searchbox.core.*;
@@ -24,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import zxx.pri.core.config.esconfigs.ElasticSearchProperties;
-import zxx.pri.core.config.esconfigs.EsAutoConfig;
 import zxx.pri.core.entity.DataEntity;
 
 import javax.annotation.Resource;
@@ -41,19 +39,18 @@ import java.util.*;
 public class EsNestedUtils {
 
     private static final Logger log = LoggerFactory.getLogger(EsNestedUtils.class);
-    @Resource
-    private EsAutoConfig esAutoConfig;
+
     @Autowired
     private Client transportClient;
     @Resource
     private ElasticSearchProperties elasticSearchProperties;
-    @Resource
-    private JestClientFactory jestClientFactory;
+    @Autowired
+    private JestHttpClient jestHttpClient;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Boolean insertDataAndTask(Map<String, Object> map, String taskDataIndex, String taskDataType) throws IOException {
-        DocumentResult result = esAutoConfig.jestHttpClient(jestClientFactory).
+        DocumentResult result = jestHttpClient.
                 execute(new Index.Builder(map).
                         index(taskDataIndex).
                         type(taskDataType).id(map.get("id") + "").refresh(true).build());
@@ -62,7 +59,7 @@ public class EsNestedUtils {
 
     public Boolean delete(Long id) throws Exception {
         String taskDataIndex = elasticSearchProperties.getIndexs().get("ES_TASK_DATA_V2_INDEX");
-        JestResult result = esAutoConfig.jestHttpClient(jestClientFactory).execute(new Delete.Builder(id + "").index(taskDataIndex).type("data").build());
+        JestResult result = jestHttpClient.execute(new Delete.Builder(id + "").index(taskDataIndex).type("data").build());
         return result.isSucceeded();
     }
 
@@ -175,7 +172,7 @@ public class EsNestedUtils {
                 .addIndex(esTaskDataIndex)
                 .addType(esDataType)
                 .build();
-        SearchResult result = esAutoConfig.jestHttpClient(jestClientFactory).execute(search);
+        SearchResult result = jestHttpClient.execute(search);
         List<SearchResult.Hit<DataEntity, Void>> hitList = result.getHits(DataEntity.class);
         List<DataEntity> listBean = new ArrayList<>();
         hitList.stream().forEach(dataInfoEntityVoidHit -> listBean.add(dataInfoEntityVoidHit.source));
@@ -196,7 +193,7 @@ public class EsNestedUtils {
                     .id(map.get("id") + "").refresh(true).build();
             indexList.add(index);
         }
-        JestHttpClient tClient = esAutoConfig.jestHttpClient(jestClientFactory);
+        JestHttpClient tClient = jestHttpClient;
         Bulk bulk = new Bulk.Builder().defaultIndex(taskDataIndex)
                 .defaultType(dataType).addAction(indexList).build();
         try {
@@ -255,7 +252,7 @@ public class EsNestedUtils {
         targetMap.put("warn", (Boolean) targetMap.get("warn") ? 1 : 0);
         targetMap.remove("realId");
         targetMap.remove("keyWords");
-        JestHttpClient tClient = esAutoConfig.jestHttpClient(jestClientFactory);
+        JestHttpClient tClient = jestHttpClient;
         try {
             DocumentResult result = tClient.execute(new Index.Builder(targetMap)
                     .index(taskDataIndex)
@@ -301,7 +298,7 @@ public class EsNestedUtils {
 
     public void select(Long taskId) throws Exception {
         String taskDataIndex = elasticSearchProperties.getIndexs().get("ES_TASK_DATA_V2_INDEX");
-        JestHttpClient tClient = esAutoConfig.jestHttpClient(jestClientFactory);
+        JestHttpClient tClient = jestHttpClient;
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         queryBuilder.must(QueryBuilders.nestedQuery("searchKeys",
                 QueryBuilders.boolQuery().must(QueryBuilders.termQuery("searchKeys.id", taskId)), ScoreMode.Total));
@@ -323,7 +320,7 @@ public class EsNestedUtils {
 
     public void selectList(List<Long> taskIdList) throws Exception {
         String taskDataIndex = elasticSearchProperties.getIndexs().get("ES_TASK_DATA_V2_INDEX");
-        JestHttpClient tClient = esAutoConfig.jestHttpClient(jestClientFactory);
+        JestHttpClient tClient = jestHttpClient;
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         queryBuilder.must(QueryBuilders.nestedQuery("searchKeys",
                 QueryBuilders.boolQuery().must(QueryBuilders.termsQuery("searchKeys.id", taskIdList)), ScoreMode.Total));
@@ -346,7 +343,7 @@ public class EsNestedUtils {
 
     public String getData(List<Long> taskIdList) throws Exception {
         String taskDataIndex = elasticSearchProperties.getIndexs().get("ES_TASK_DATA_V2_INDEX");
-        JestHttpClient tClient = esAutoConfig.jestHttpClient(jestClientFactory);
+        JestHttpClient tClient = jestHttpClient;
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
        /* for(Long ll:taskIdList){
             queryBuilder.must(QueryBuilders.termQuery("id",ll));

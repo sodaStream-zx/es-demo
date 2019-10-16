@@ -23,18 +23,14 @@ public class EsAutoConfig {
     @Autowired
     private ElasticSearchProperties elasticSearchProperties;
 
-    public JestHttpClient jestHttpClient(JestClientFactory jestClientFactory) {
-        JestHttpClient client = (JestHttpClient) jestClientFactory.getObject();
-        return client;
-    }
-
     @Bean
-    public JestClientFactory jestClientFactory() {
+    public JestHttpClient jestClientFactory() {
         log.warn("-------------->>es连接配置");
         JestClientFactory factory = new JestClientFactory();
         factory.setHttpClientConfig(new HttpClientConfig.Builder(elasticSearchProperties.getHosts())
                 .defaultMaxTotalConnectionPerRoute(2000).maxTotalConnection(5000)
                 .connTimeout(3000).readTimeout(5 * 600000).multiThreaded(true).build());
-        return factory;
+        JestHttpClient client = (JestHttpClient) factory.getObject();
+        return client;
     }
 }

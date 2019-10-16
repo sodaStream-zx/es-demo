@@ -3,7 +3,7 @@ package zxx.pri.core.service;
 import com.alibaba.fastjson.JSON;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.common.Term;
-import io.searchbox.client.JestClientFactory;
+import io.searchbox.client.http.JestHttpClient;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +16,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import zxx.pri.core.config.esconfigs.ElasticSearchProperties;
-import zxx.pri.core.config.esconfigs.EsAutoConfig;
 import zxx.pri.core.entity.DataPojo;
 import zxx.pri.core.mapper.DataInfoMapper;
 
@@ -39,9 +38,7 @@ public class TransportEsV2 {
     @Resource
     private RedisTemplate redisTemplate;
     @Resource
-    private JestClientFactory jestClientFactory;
-    @Resource
-    private EsAutoConfig esAutoConfig;
+    private JestHttpClient jestHttpClient;
 
     public String searchDataList(int page, int pageSize, Long userId, String content, String appraise,
                                  Long dateType, String type, Long realId) throws Exception {
@@ -157,7 +154,7 @@ public class TransportEsV2 {
                 .addIndex(esTaskDataIndex)
                 .addType(esDataType)
                 .build();
-        SearchResult result = esAutoConfig.jestHttpClient(jestClientFactory).execute(search);
+        SearchResult result = jestHttpClient.execute(search);
         List<SearchResult.Hit<DataPojo, Void>> hitList = result.getHits(DataPojo.class);
         List<DataPojo> listBean = new ArrayList<>();
         hitList.stream().forEach(dataInfoEntityVoidHit -> listBean.add(dataInfoEntityVoidHit.source));
