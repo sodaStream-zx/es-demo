@@ -12,6 +12,7 @@ common:
   es:
     types:
       ES_DATA_TYPE: data
+      ES_DATA_TYPE2: andata
       ES_USER_TYPE: user
       ES_TASK_TYPE: task
     hosts: http://10.253.90.84:9200
@@ -22,6 +23,7 @@ common:
       YUNCEORIGINAL: yunce_original
       ES_TASK_DATA_INDEX: yunce_task_data
       ES_TASK_DATA_V2_INDEX: myyunce
+      ES_TASK_DATA_V3_INDEX: anotheryunce
     enabled: true
     cluster-name: my-test
     port: 9200

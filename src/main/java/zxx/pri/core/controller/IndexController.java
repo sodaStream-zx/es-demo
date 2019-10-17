@@ -26,11 +26,11 @@ public class IndexController {
     private YunceTaskDataV2Service yunceTaskDataV2Service;
 
     @PostMapping("/newTaskDataToES")
-    public String insertewTaskDataToEsV2(Long realId) throws Exception {
+    public String insertewTaskDataToEsV2(Long realId, Integer type) throws Exception {
         if (!StringUtils.isEmpty(realId)) {
             log.warn("-------->>  插入单个realid {}", realId);
             Long st = System.currentTimeMillis();
-            yunceTaskDataV2Service.insertRealData(realId);
+            yunceTaskDataV2Service.insertRealData(realId, type);
             log.warn("-------->>  插入realid {} ，所有数据 用时：{}", realId, (System.currentTimeMillis() - st));
         } else {
             log.warn("-------->> 遍历所有realid");
@@ -38,7 +38,7 @@ public class IndexController {
             longs.stream().forEach(aLong -> {
                 try {
                     Long st = System.currentTimeMillis();
-                    yunceTaskDataV2Service.insertRealData(aLong);
+                    yunceTaskDataV2Service.insertRealData(aLong, type);
                     log.warn(" -------->> 插入realid {} ，所有数据 用时：{}", aLong, (System.currentTimeMillis() - st) / 1000);
                 } catch (Exception e) {
                     log.error(" -------->>  异常 {}", e);

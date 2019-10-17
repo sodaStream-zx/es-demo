@@ -38,14 +38,20 @@ public class YunceTaskDataV2Service {
      *
      * @return
      */
-    public void insertRealData(Long realId) throws Exception {
+    public void insertRealData(Long realId, Integer type) throws Exception {
+
         List<Map<String, Object>> mapList = taskDataV2Mapper.findDataByidsV3(realId);
         log.warn("realId {} ,数据量条数为 {}", realId, mapList.size());
         if (mapList.size() == 0) {
             return;
         }
         for (Map<String, Object> m : mapList) {
-            boolean flag = esNestedUtils.oneAdd(m);
+            boolean flag;
+            if (type != null && type == 1) {
+                flag = esNestedUtils.oneAdd(m);
+            } else {
+                flag = esNestedUtils.oneAddByJest(m);
+            }
             if (!flag) {
                 System.out.print("操作失败");
             }

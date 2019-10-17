@@ -18,6 +18,23 @@ public class Account {
     private String city;
     private String state;
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "account_number=" + account_number +
+                ", balance=" + balance +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", age=" + age +
+                ", gender=" + gender +
+                ", address='" + address + '\'' +
+                ", employer='" + employer + '\'' +
+                ", email='" + email + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                '}';
+    }
+
     public Account() {
     }
 

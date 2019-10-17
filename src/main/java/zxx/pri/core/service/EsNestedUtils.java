@@ -205,9 +205,84 @@ public class EsNestedUtils {
         return null;
     }
 
+    public boolean oneAddByJest(Map<String, Object> targetMap) throws Exception {
+        String taskDataIndex = elasticSearchProperties.getIndexs().get("ES_TASK_DATA_V3_INDEX");
+        String dataType = elasticSearchProperties.getTypes().get("ES_DATA_TYPE2");
+
+        SearchRequestBuilder sbuilder = transportClient.prepareSearch(taskDataIndex).setTypes(dataType);
+        SearchResponse actionGet = sbuilder.setQuery(QueryBuilders.idsQuery().addIds(targetMap.get("id") + "")).execute().actionGet();
+        if (actionGet.getHits().hits().length > 0) {
+            //存在
+            SearchHit hit = actionGet.getHits().getHits()[0];
+            Object searchKeys = hit.getSource().get("searchKeys");
+            Map<String, Object> d = geneMap(targetMap);
+            if (searchKeys != null) {
+                Set<Map<String, Object>> set = new HashSet<>();
+                List<Map<String, Object>> keys = new ArrayList<>();
+                try {
+                    keys = (List) searchKeys;
+                    set = new HashSet<>(keys);
+                } catch (Exception e) {
+                    logger.warn("dataId:{}", hit.getSource().get("id"));
+                    if (e instanceof ClassCastException) {
+                        Map<String, Object> dd = (Map<String, Object>) searchKeys;
+                        set.add(dd);
+                    }
+                }
+                if (set.size() > 0) {
+                    if (!compareListMap(set, d)) {
+                        set.add(d);
+                    } else {
+                        if (keys.size() == set.size()) {
+                            return true;
+                        }
+                    }
+                }
+                targetMap.put("searchKeys", new ArrayList<>(set));
+            } else {
+                List<Map<String, Object>> list = new ArrayList<>();
+                list.add(d);
+                targetMap.put("searchKeys", list);
+            }
+        } else {
+            List<Map<String, Object>> list = new ArrayList<>();
+            list.add(geneMap(targetMap));
+            targetMap.put("searchKeys", list);
+        }
+        targetMap.put("warn", (Boolean) targetMap.get("warn") ? 1 : 0);
+        targetMap.remove("realId");
+        targetMap.remove("keyWords");
+        JestHttpClient tClient = jestHttpClient;
+        try {
+            Index index = new Index.Builder(targetMap)
+                    .index(taskDataIndex)
+                    .type(dataType)
+                    .id(targetMap.get("id").toString())
+                    .refresh(true)
+                    .build();
+            DocumentResult result = jestHttpClient.execute(index);
+            if (!result.isSucceeded()) {
+                logger.error("插入失败:" + targetMap);
+                logger.error("错误信息:" + result.getErrorMessage());
+            }
+            return result.isSucceeded();
+        } catch (Exception e) {
+            if (e instanceof SocketTimeoutException) {
+                Index index = new Index.Builder(targetMap)
+                        .index(taskDataIndex)
+                        .type(dataType)
+                        .id(targetMap.get("id").toString())
+                        .refresh(true)
+                        .build();
+                DocumentResult result = jestHttpClient.execute(index);
+            }
+            throw new Exception(e);
+        }
+    }
+
     public boolean oneAdd(Map<String, Object> targetMap) throws Exception {
-        String taskDataIndex = elasticSearchProperties.getIndexs().get("ES_TASK_DATA_V2_INDEX");
-        String dataType = elasticSearchProperties.getTypes().get("ES_DATA_TYPE");
+        String taskDataIndex = elasticSearchProperties.getIndexs().get("ES_TASK_DATA_V3_INDEX");
+        String dataType = elasticSearchProperties.getTypes().get("ES_DATA_TYPE2");
 
         SearchRequestBuilder sbuilder = transportClient.prepareSearch(taskDataIndex).setTypes(dataType);
         SearchResponse actionGet = sbuilder.setQuery(QueryBuilders.idsQuery().addIds(targetMap.get("id") + "")).execute().actionGet();
