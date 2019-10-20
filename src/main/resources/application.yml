@@ -15,8 +15,8 @@ common:
       ES_DATA_TYPE2: andata
       ES_USER_TYPE: user
       ES_TASK_TYPE: task
-    hosts: http://10.253.90.84:9200
-    #    hosts: http://127.0.0.1:9200
+      #    hosts: http://10.253.90.84:9200
+    hosts: http://192.168.226.110:9200
     indexs:
       YUNCEDATAES: yunce_data_es
       ES_INDEX: yunce_data
@@ -30,12 +30,12 @@ common:
   custom-durid:
     enabled: true
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://10.253.50.250:3306/yunce?useSSL=false&allowMultiQueries=true
-    #    url: jdbc:mysql://127.0.0.1:3306/yunce?useSSL=false&allowMultiQueries=true
-    username: zzyq
-    #    username: root
-    #    password: zxx1994
-    password: 1qaz2WSX!@
+    #    url: jdbc:mysql://10.253.50.250:3306/yunce?useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/yunce?useSSL=false&allowMultiQueries=true
+    #    username: zzyq
+    username: root
+    password: zxx1994
+    #    password: 1qaz2WSX!@
     type: com.alibaba.druid.pool.DruidDataSource
     initialSize: 50
     minIdle: 10

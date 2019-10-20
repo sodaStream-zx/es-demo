@@ -81,7 +81,6 @@ public class EsHttpService {
             public void completed(JestResult jestResult) {
                 EsHttpService.jestResultPrint(jestResult);
             }
-
             @Override
             public void failed(Exception e) {
                 System.out.println("artical 索引创建失败");

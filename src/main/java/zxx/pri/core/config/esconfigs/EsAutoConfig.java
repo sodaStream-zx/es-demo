@@ -29,7 +29,7 @@ public class EsAutoConfig {
         JestClientFactory factory = new JestClientFactory();
         factory.setHttpClientConfig(new HttpClientConfig.Builder(elasticSearchProperties.getHosts())
                 .defaultMaxTotalConnectionPerRoute(2000).maxTotalConnection(5000)
-                .connTimeout(3000).readTimeout(5 * 600000).multiThreaded(true).build());
+                .connTimeout(2000).readTimeout(10000).multiThreaded(true).build());
         JestHttpClient client = (JestHttpClient) factory.getObject();
         return client;
     }

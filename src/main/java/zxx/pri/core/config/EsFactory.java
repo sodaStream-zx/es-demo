@@ -23,7 +23,7 @@ public class EsFactory {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     //    private final String ip = "10.253.90.84";
     private final String ip = "10.253.90.90";
-    private final String localIp = "127.0.0.1";
+    private final String localIp = "192.168.226.110";
 
     @Bean(value = "esClient")
     public Client client() {
@@ -33,7 +33,7 @@ public class EsFactory {
                 .build();
         TransportClient client = null;
         try {
-            client = new PreBuiltTransportClient(settings).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(ip), 9300));
+            client = new PreBuiltTransportClient(Settings.EMPTY).addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(localIp), 9300));
         } catch (UnknownHostException e) {
             log.error("连接es服务器异常 {} ", e);
         }
