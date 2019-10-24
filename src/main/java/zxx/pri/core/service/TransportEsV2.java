@@ -12,6 +12,8 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -30,6 +32,7 @@ import java.util.*;
 @Service
 public class TransportEsV2 {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private static SimpleDateFormat YMDHMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Resource
     private ElasticSearchProperties elasticSearchProperties;
@@ -107,10 +110,8 @@ public class TransportEsV2 {
         } else {
             realIdList.add(realId);
         }
-        queryBuilder.must(QueryBuilders.nestedQuery("searchKeys",
-                QueryBuilders.boolQuery().must(
-                        QueryBuilders.termsQuery("searchKeys.id", realIdList)),
-                ScoreMode.Total));
+        queryBuilder.must(QueryBuilders.nestedQuery("searchKeys", QueryBuilders.boolQuery()
+                .must(QueryBuilders.termsQuery("searchKeys.id", realIdList)), ScoreMode.Total));
         //判断搜索内容
         if (StringUtils.isNotEmpty(content) && realId == 0) {
             //matchPhraseQuery  模糊查询的精确匹配
@@ -150,6 +151,8 @@ public class TransportEsV2 {
         int pageBegainNum = (page - 1) * pageSize;
         SearchSourceBuilder ssb = new SearchSourceBuilder();
         ssb.query(queryBuilder).sort("publishDate", SortOrder.DESC).size(pageSize).from(pageBegainNum);
+        log.warn("request :: {}", ssb.toString());
+
         Search search = new Search.Builder(ssb.toString())
                 .addIndex(esTaskDataIndex)
                 .addType(esDataType)

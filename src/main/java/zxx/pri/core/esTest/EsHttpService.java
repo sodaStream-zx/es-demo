@@ -11,11 +11,15 @@ import io.searchbox.core.SearchResult;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.mapping.PutMapping;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,6 +37,7 @@ import java.util.Map;
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 public class EsHttpService {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private JestHttpClient jestHttpClient;
 
@@ -103,14 +108,26 @@ public class EsHttpService {
     /*search source */
     @Test
     public void myTest4() throws IOException {
+        Long st = System.currentTimeMillis();
+        BoolQueryBuilder filter = new BoolQueryBuilder()
+                .filter(new RangeQueryBuilder("account_number")
+                        .gt(100).lte(500))
+                .must(new MatchQueryBuilder("gender", "F"));
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.matchQuery("address", "Place")).size(10).sort("age", SortOrder.ASC);
+        searchSourceBuilder.query(filter)
+                .sort("account_number", SortOrder.ASC)
+                .sort("age", SortOrder.DESC)
+                .from(0).size(30)
+                .version(true);
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex("mytest").addType("account").build();
+        log.warn("req :: {}", searchSourceBuilder.toString());
         SearchResult execute = jestHttpClient.execute(search);
         System.out.println("总数：" + execute.getTotal());
         System.out.println("查询成功？ " + execute.isSucceeded());
         List<SearchResult.Hit<Account, Void>> hits = execute.getHits(Account.class);
         hits.stream().forEach(accountVoidHit -> System.out.println(accountVoidHit.source.toString()));
+        log.warn("userdtime: {}", (System.currentTimeMillis() - st));
 //        System.out.println(execute.getSourceAsString());
     }
+
 }
